@@ -5,50 +5,98 @@
 и начисляемых за них бонусов сформировать отдельно и вывести на экран.
 */
 
-func addBonus(sale: String) -> Bool {
-    switch sale {
-    case "Sale0":
-        bonus += Sale.Sale0.rawValue
-        return true
-    case "Sale1":
-        bonus += Sale.Sale1.rawValue
-        return true
-    case "Sale2":
-        bonus += Sale.Sale2.rawValue
-        return true
-    case "Sale3":
-        bonus += Sale.Sale3.rawValue
-        return true
-    default:
-        print("Акция выбрана неправильно!")
-        return false
-    }
-}
-
 /* Написать функцию перевода бонусов в рубли и показать 
 сумму скидки в рублях. (Формула произвольна, на Ваше усмотрение).
 */
 
-var bonus = 100
-print("Текущий бонус: \(bonus)")
+/* Написать функцию, показывающую количество получаемых наклеек 
+в зависимости от числа имеющихся бонусов и возможные призы в акции, 
+а также сколько еще наклеек надо собрать, чтобы получить каждый из них.
+*/
+import Foundation
 
-enum Sale: Int, CaseIterable {
-    case Sale0 = 50
-    case Sale1 = 100
-    case Sale2 = 80
-    case Sale3 = 150
+func addBonus(saleName: String) -> Bool {
+    for sale in sales {
+        if sale.name == saleName {
+            bonus += sale.bonus
+            return true
+        }
+    }
+    print("Акция '\(saleName)' не найдена! Попробуйте снова.")
+    return false
 }
 
-print("\nДоступные акции: ")
-for i in Sale.allCases {
-    print(i)
+func buyGift(_ giftName: String) {
+    for gift in gifts {
+        if gift.name == giftName {
+            let availableMarks = convertBonusToMarks(bonus)
+            if gift.price <= marks + availableMarks {
+                let mod = gift.price - marks
+                marks += mod
+                bonus -= mod * markCoof
+                print("Подарок приобретён! Остаток бонусов: \(bonus)")
+                exit(0)
+            }
+        }
+    }
+    print("Подарок не найден! Попробуйте снова.")
 }
 
-print("\nВыберите акцию: ", terminator: "")
-var sale = readLine()
-
-while !addBonus(sale: sale ?? "default") {
-    sale = readLine()
+func convertBonusToRubles(_ bonus: Int) -> Double {
+    return Double(Float(bonus) * rubCoof)
 }
 
-print("\nНовый бонус: \(bonus)")
+func convertBonusToMarks(_ bonus: Int) -> Int {
+    return bonus / markCoof
+}
+
+let sales: [(name: String, bonus: Int)] = [
+    ("New Year's Special offer", 50),
+    ("Summer Sale", 100),
+    ("Birthday discount", 80),
+    ("Special offer", 150)
+]
+
+let gifts: [(name: String, price: Int)] = [
+    ("Free Short Ride (up to 3 km)", 50),
+    ("50% Discount on Next Ride", 100),
+    ("Free Airport Transfer", 300),
+    ("Complimentary City Tour", 250),
+    ("Free Ride to Restaurant District", 120),
+    ("Priority Booking Pass", 80),
+    ("Free Wait Time (15 minutes)", 60),
+    ("Business Class Upgrade", 200),
+    ("Weekend Free Ride Pass", 180),
+    ("Loyalty Bonus (10% all rides)", 150)
+]
+
+let rubCoof: Float = 0.5, markCoof: Int = 50
+
+var bonus: Int = 10000, rubles: Int = 0, marks: Int = 0
+
+var selectedSale, selectedGift: String
+
+
+print("Текущий бонус: \(bonus)\nБаланс: \(rubles)")
+
+print("\nДоступные акции:")
+for (index, sale) in sales.enumerated() {
+    print("\(index + 1). \(sale.name) - +\(sale.bonus) бонусов")
+}
+
+repeat {
+    print("Выберите акцию из списка: ", terminator: "")
+    selectedSale = readLine() ?? ""
+} while !addBonus(saleName: selectedSale)
+
+print("\nВаш бонус: \(bonus) (\(convertBonusToRubles(bonus)) рублей / \(convertBonusToMarks(bonus)) наклеек)")
+
+print("Не хотите приобрести подарок?")
+for (index, gift) in gifts.enumerated() {
+    print("\(index + 1). \(gift.name) - +\(gift.price)")
+}
+
+repeat {
+    selectedGift = readLine() ?? ""
+    buyGift(selectedGift)
+} while selectedGift != "No"
