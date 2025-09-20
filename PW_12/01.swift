@@ -42,3 +42,23 @@ class Firm {
         }
     }
 }
+
+/* Создать новый класс на основе исходного с учетом 
+варианта задания (реестр фирм), использовать пример со стр 2. */
+
+class FirmRegistry {
+    var firms: [Firm] = [Firm]()
+
+    subscript(index: Int) -> Firm? {
+        get {
+            guard index >= 0 && index < firms.count else { return nil }
+            return firms[index]
+        }
+        set {
+            guard index >= 0 && index < firms.count, let newFirm = newValue else { return }
+            firms[index] = newFirm
+        }
+    }
+}
+
+/*
