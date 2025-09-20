@@ -22,21 +22,16 @@ let student2: [String: Any] = [
     "group": "IT-102"
 ]
 
-var oldest, tallest, heaviest: String
+var oldest, tallest: String
 
 if let height1 = student1["height"] as? Int, let height2 = student2["height"] as? Int {
     tallest = height1 > height2 ? student1["name"] as! String : 
               height2 > height1 ? student2["name"] as! String : "Одинаковый рост"
-}
-
-if let weight1 = student1["weight"] as? Int, let weight2 = student2["weight"] as? Int {
-    heaviest = weight1 > weight2 ? student1["name"] as! String : 
-               weight2 > weight1 ? student2["name"] as! String : "Одинаковый вес"
+    print("Самый высокий: \(tallest)")
 }
 
 if let age1 = student1["age"] as? Int, let age2 = student2["age"] as? Int {
     oldest = age1 > age2 ? student1["name"] as! String : 
              age2 > age1 ? student2["name"] as! String : "Одинаковый возраст"
+    print("Самый старший: \(oldest)")
 }
-
-print("Самый старший: \(oldest)")
