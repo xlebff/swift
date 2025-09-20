@@ -41,6 +41,10 @@ class Firm {
             }
         }
     }
+
+    func printInfo() {
+        print("Name: \(self[0]!)\nService type: \(self[1]!)\nRevenue: \(self[2]!)")
+    }
 }
 
 /* Создать новый класс на основе исходного с учетом 
@@ -59,6 +63,23 @@ class FirmRegistry {
             firms[index] = newFirm
         }
     }
+
+    func addCompany(_ firm: Firm) {
+        firms.append(firm)
+    }
 }
 
-/*
+/* Заполнить информацию и вывести на экран */
+
+let registry = FirmRegistry()
+
+let firm0: Firm = Firm("Aurora", "Flowers", 1_200_000)
+let firm1: Firm = Firm("Debian", "N/A", 5_000_000)
+
+registry.addCompany(firm0)
+registry[0]!.printInfo()
+
+print()
+
+registry.addCompany(firm1)
+registry[1]!.printInfo()
